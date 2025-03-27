@@ -23,16 +23,23 @@ public class Rotate extends Effect {
     }
 
     @Override
-    public void playOn(Bandeau b) {
-        super.init(b);
-        int delay = dureeDunTour / nombreDePas;
-        double old = b.getRotation();
-        int increment = clockwise ? 1 : -1;
-        for (int pas = 0; Math.abs(pas) != nombreDePas; pas += increment) {
-            double theta = (Math.PI * 2 * pas) / nombreDePas;
-            b.setRotation(theta);
-            b.sleep(delay);
+    public void playOn(BandeauLock b) throws InterruptedException {
+        try {
+            if (b.tryLock(1000)) {
+                super.init(b);
+                int delay = dureeDunTour / nombreDePas;
+                double old = b.getRotation();
+                int increment = clockwise ? 1 : -1;
+                for (int pas = 0; Math.abs(pas) != nombreDePas; pas += increment) {
+                    double theta = (Math.PI * 2 * pas) / nombreDePas;
+                    b.setRotation(theta);
+                    b.sleep(delay);
+                }
+                b.setRotation(old);
+            }
+        } finally {
+            b.releaseLock();
         }
-        b.setRotation(old);
+
     }
 }

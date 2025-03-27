@@ -20,11 +20,17 @@ public class Rainbow extends Effect {
     }
 
     @Override
-    public void playOn(Bandeau b) {
-        super.init(b);
-        for (Color c : myColors) {
-            b.setForeground(c);
-            b.sleep(300);
+    public void playOn(BandeauLock b) throws InterruptedException {
+        try {
+            if (b.tryLock(1000)) {
+                super.init(b);
+                for (Color c : myColors) {
+                    b.setForeground(c);
+                    b.sleep(300);
+                }
+            }
+        } finally {
+            b.releaseLock();
         }
     }
 }

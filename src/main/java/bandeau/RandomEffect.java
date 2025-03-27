@@ -19,24 +19,31 @@ public class RandomEffect extends Effect {
     }
 
     @Override
-    public void playOn(Bandeau b) {
-        super.init(b);
-        Font initial = b.getFont();
-        String message = b.getMessage();
-        StringBuilder display = new StringBuilder();
+    public void playOn(BandeauLock b) throws InterruptedException {
+        try {
+            if (b.tryLock(1000)) {
+                super.init(b);
+                Font initial = b.getFont();
+                String message = b.getMessage();
+                StringBuilder display = new StringBuilder();
 
-        for (int i = 0; i < message.length(); i++) {
-            display.append("_");
+                for (int i = 0; i < message.length(); i++) {
+                    display.append("_");
+                }
+
+                b.setFont(new Font("Monospaced", Font.BOLD, 25));
+                b.setMessage(display.toString());
+                b.sleep(myDelay);
+                for (Integer i : myRandom.randomIntegers(message.length())) {
+                    display.setCharAt(i, message.charAt(i));
+                    b.setMessage(display.toString());
+                    b.sleep(myDelay);
+                }
+                b.setFont(initial);
+            }
+        } finally {
+            b.releaseLock();
         }
 
-        b.setFont(new Font("Monospaced", Font.BOLD, 25));
-        b.setMessage(display.toString());
-        b.sleep(myDelay);
-        for (Integer i : myRandom.randomIntegers(message.length())) {
-            display.setCharAt(i, message.charAt(i));
-            b.setMessage(display.toString());
-            b.sleep(myDelay);
-        }
-        b.setFont(initial);
     }
 }

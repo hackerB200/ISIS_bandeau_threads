@@ -13,13 +13,20 @@ public class Zoom extends Effect {
     }
 
     @Override
-    public void playOn(Bandeau b) {
-        super.init(b);
-        for (int fontSize = 1; fontSize < 40; fontSize++) {
-            b.setFont(
-                    new java.awt.Font("Monospaced", java.awt.Font.BOLD, fontSize)
-            );
-            b.sleep(myDelay);
+    public void playOn(BandeauLock b) throws InterruptedException {
+        try {
+            if (b.tryLock(1000)) {
+                super.init(b);
+                for (int fontSize = 1; fontSize < 40; fontSize++) {
+                    b.setFont(
+                            new java.awt.Font("Monospaced", java.awt.Font.BOLD, fontSize)
+                    );
+                    b.sleep(myDelay);
+                }
+            }
+        } finally {
+            b.releaseLock();
         }
+
     }
 }

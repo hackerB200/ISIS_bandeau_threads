@@ -13,13 +13,19 @@ public class Blink extends Effect {
     }
 
     @Override
-    public void playOn(Bandeau bandeau) {
-        super.init(bandeau);
-        String message = bandeau.getMessage();
-        bandeau.setMessage("");
-        bandeau.sleep(myDelay);
-        bandeau.setMessage(message);
-        bandeau.sleep(myDelay);
+    public void playOn(BandeauLock bandeau) throws InterruptedException {
+        try {
+            if (bandeau.tryLock(1000)) {
+                super.init(bandeau);
+                String message = bandeau.getMessage();
+                bandeau.setMessage("");
+                bandeau.sleep(myDelay);
+                bandeau.setMessage(message);
+                bandeau.sleep(myDelay);
+            }
+        } finally {
+            bandeau.releaseLock();
+        }
     }
 
 }

@@ -25,5 +25,5 @@ public abstract class Effect {
     /**
      * Jouer cet effet sur un bandeau
      */
-    abstract public void playOn(Bandeau bandeau);
+    abstract public void playOn(BandeauLock bandeau) throws InterruptedException;
 }

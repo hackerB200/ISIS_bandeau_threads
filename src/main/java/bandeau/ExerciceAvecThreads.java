@@ -11,9 +11,9 @@ public class ExerciceAvecThreads {
 
         Scenario s = makeScenario();
         // On cree les bandeaux
-        var b1 = new Bandeau();
-        var b2 = new Bandeau();
-        var b3 = new Bandeau();
+        var b1 = new BandeauLock();
+        var b2 = new BandeauLock();
+        var b3 = new BandeauLock();
         System.out.println("CTRL-C pour terminer le programme");
         // On doit jouer le scénario en même temps sur les trois bandeaux
         // On crée un thread pour chaque bandeau
@@ -30,7 +30,7 @@ public class ExerciceAvecThreads {
         // On lui ajoute des effets
         s.addEffect(new RandomEffect("Le jeu du pendu", 700), 1);
         // s.addEffect(new TeleType("Je m'affiche caractère par caractère", 100), 1);
-        // s.addEffect(new Blink("Je clignote 10x", 100), 10);
+//         s.addEffect(new Blink("Je clignote 10x", 100), 10);
         // s.addEffect(new Zoom("Je zoome", 50), 1);
         // s.addEffect(new FontEnumerator(10), 1);
         // s.addEffect(new Rainbow("Comme c'est joli !", 30), 1);

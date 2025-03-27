@@ -13,12 +13,19 @@ public class TeleType extends Effect {
     }
 
     @Override
-    public void playOn(Bandeau b) {
-        super.init(b);
-        String message = b.getMessage();
-        for (int i = 0; i <= message.length(); i++) {
-            b.setMessage(message.substring(0, i));
-            b.sleep(myDelay);
+    public void playOn(BandeauLock b) throws InterruptedException {
+        try {
+            if (b.tryLock(1000)) {
+                super.init(b);
+                String message = b.getMessage();
+                for (int i = 0; i <= message.length(); i++) {
+                    b.setMessage(message.substring(0, i));
+                    b.sleep(myDelay);
+                }
+            }
+        } finally {
+            b.releaseLock();
         }
+
     }
 }

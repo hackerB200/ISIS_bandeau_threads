@@ -23,17 +23,23 @@ public class FontEnumerator extends Effect {
     }
 
     @Override
-    public void playOn(Bandeau bandeau) {
+    public void playOn(BandeauLock bandeau) throws InterruptedException {
         Font initial = bandeau.getFont();
+        try {
+            if (bandeau.tryLock(1000)) {
+                for (int repeat = 0; repeat < maxFonts; repeat++) {
+                    int fontNumber = generator.nextInt(fonts.length);
+                    bandeau.setMessage(fonts[fontNumber]);
+                    bandeau.setFont(new Font(fonts[fontNumber], Font.BOLD, 16));
+                    bandeau.sleep(500);
+                }
 
-        for (int repeat = 0; repeat < maxFonts; repeat++) {
-            int fontNumber = generator.nextInt(fonts.length);
-            bandeau.setMessage(fonts[fontNumber]);
-            bandeau.setFont(new Font(fonts[fontNumber], Font.BOLD, 16));
-            bandeau.sleep(500);
+                bandeau.setFont(initial);
+            }
+        } finally {
+            bandeau.releaseLock();
         }
 
-        bandeau.setFont(initial);
     }
 
 }
